@@ -1,0 +1,64 @@
+* elbookmark
+
+Bookmark Utils.
+
+** Installation
+
+Emacs >= 28.1 is required.
+
+*** Manual
+
+Ensure that you have installed required dependencies: 
+- ~emacs~ >= 28.1
+
+Download the source code and put it wherever you like, e.g. into =~/.emacs.d/elbookmark/=
+
+#+begin_src shell :eval no
+git clone https://github.com/KarimAziev/elbookmark.git ~/.emacs.d/elbookmark/
+#+end_src
+
+Add the downloaded directory to the load path:
+
+#+begin_src elisp :eval no
+(add-to-list 'load-path "~/.emacs.d/elbookmark/")
+(require 'elbookmark)
+#+end_src
+
+#+begin_src elisp :eval no
+(use-package elbookmark
+  :straight (elbookmark
+             :repo "KarimAziev/elbookmark"
+             :type git
+             :host github)
+  :bind ((:map elbookmark-keymap
+               ("C-j" . elbookmark-preview)
+               ("C-." . elbookmark-minibuffer-switch-to-transient)
+               ("C-c C-o" . elbookmark-jump-in-other-window)))
+  :commands (elbookmark-transient-dwim
+             elbookmark-jump
+             elbookmark-cleanup-nonexisting))
+#+end_src
+
+** Keymaps
+
+** Commands
+
+*** ~elbookmark-jump~  (&optional bookmark display-func)
+
+Same as =bookmark-jump= but with additional commands in minibuffer:
+
+| Key     | Command                                   | Description                                 |
+|---------+-------------------------------------------+---------------------------------------------|
+| C-c C-o | elbookmark-jump-in-other-window           | jump in other window and exit minibuffer.   |
+| C-j     | elbookmark-preview                        | preview bookmark without exiting minibuffer |
+| C-.     | elbookmark-minibuffer-switch-to-transient | exit and show transient commands            |
+
+To change this bindings edit the variable  ~elbookmark-minibuffer-keymap~.
+
+** Transient menus
+*** ~elbookmark-transient-dwim~
+Invoke either =elbookmark-transient= or =elbookmark-transient-bmenu-mode=.
+*** ~elbookmark-transient~
+Menu for =bookmark-bmenu=.
+*** ~elbookmark-transient-bmenu-mode~
+Menu for =bookmark-bmenu-mode=.
