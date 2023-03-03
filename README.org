@@ -30,7 +30,7 @@ Add the downloaded directory to the load path:
              :repo "KarimAziev/elbookmark"
              :type git
              :host github)
-  :bind ((:map elbookmark-keymap
+  :bind ((:map elbookmark-minibuffer-keymap
                ("C-j" . elbookmark-preview)
                ("C-." . elbookmark-minibuffer-switch-to-transient)
                ("C-c C-o" . elbookmark-jump-in-other-window)))
