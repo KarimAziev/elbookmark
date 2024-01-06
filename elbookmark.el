@@ -109,7 +109,7 @@
 
 
 (defun elbookmark-minibuffer-switch-to-transient ()
-  "Preview bookmark."
+  "Switch to transient mode from minibuffer after a delay."
   (interactive)
   (when (minibufferp)
     (run-with-timer 0.1 nil
@@ -117,7 +117,7 @@
     (abort-minibuffers)))
 
 (defun elbookmark-preview ()
-  "Preview bookmark."
+  "Preview selected bookmark before opening it."
   (interactive)
   (when-let ((x
               (or (car-safe (elbookmark-get-minibuffer-completion)))))
@@ -199,14 +199,15 @@ bookmark."
                 (bookmark-completing-read "Jump to bookmark"
                                           bookmark-current-bookmark)))))
   (when bookmark
-    (when-let ((loc (expand-file-name (when (fboundp 'bookmark-location)
-                                        (bookmark-location bookmark)))))
+    (when-let ((loc (expand-file-name
+                     (when (fboundp 'bookmark-location)
+                       (bookmark-location bookmark)))))
       (if (and (file-directory-p loc))
           (let* ((tramp-archive-enabled nil))
             (funcall (if elbookmark-other-wind 'find-file
                        'find-file-other-window)
                      (completing-read "File: " (directory-files-recursively
-                                                loc "." nil))))
+                                                loc "[.]" nil))))
         (bookmark-maybe-historicize-string bookmark)
         (when elbookmark-other-wind
           (let ((wind (selected-window)))
@@ -277,7 +278,9 @@ bookmark."
 (transient-define-prefix elbookmark-transient ()
   "Menu for `bookmark-bmenu'."
   [["Bookmarks"
-    ("l" "List" bookmark-bmenu-list)
+    ("l" "List" (lambda ()
+                  (interactive)
+                  (call-interactively 'bookmark-bmenu-list)))
     ("j" "Jump" elbookmark-jump)
     ("s" "Save" bookmark-save)
     ("w" "Write" bookmark-write)
