@@ -38,7 +38,7 @@
   (interactive)
   (require 'bookmark)
   (dolist (cell bookmark-alist)
-    (when-let ((filename (alist-get 'filename (cdr cell)))
+    (when-let* ((filename (alist-get 'filename (cdr cell)))
                (bookmark-name (car cell)))
       (unless (file-exists-p filename)
         (when (yes-or-no-p (format "Removing bookmark %s in %s?" bookmark-name
@@ -119,7 +119,7 @@
 (defun elbookmark-preview ()
   "Preview selected bookmark before opening it."
   (interactive)
-  (when-let ((x
+  (when-let* ((x
               (or (car-safe (elbookmark-get-minibuffer-completion)))))
     (when (member x (when (fboundp 'bookmark-all-names)
                       (bookmark-all-names)))
@@ -150,7 +150,7 @@
   "Set flag for jump in other window and exit minibuffer."
   (interactive)
   (setq elbookmark-other-wind t)
-  (when-let ((key (where-is-internal
+  (when-let* ((key (where-is-internal
                    'exit-minibuffer
                    minibuffer-mode-map
                    t t
@@ -199,7 +199,7 @@ bookmark."
                 (bookmark-completing-read "Jump to bookmark"
                                           bookmark-current-bookmark)))))
   (when bookmark
-    (when-let ((loc (expand-file-name
+    (when-let* ((loc (expand-file-name
                      (when (fboundp 'bookmark-location)
                        (bookmark-location bookmark)))))
       (if (and (file-directory-p loc))
